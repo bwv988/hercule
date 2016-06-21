@@ -1,0 +1,32 @@
+# Git ignore file.
+# RS20062016
+
+*.class
+
+# IDE Project files.
+.project
+.classpath
+.settings
+*.iml
+.idea
+
+# Binary packages
+*.ear
+*.jar
+*.war
+
+# Maven residuals
+target
+reports
+
+# FIXME: Add sbt.
+
+# Backup files.
+*~
+
+# Vagrant and Packer.io residuals.
+.vagrant/
+packer_cache/
+*.box
+*.ova
+*.vdi

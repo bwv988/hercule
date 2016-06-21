@@ -1,0 +1,91 @@
+{
+  "variables": {
+    "artifact_version": "1.0.0",
+    "atlas_artifact": "{{user `atlas_user`}}/{{user `box_name`}}",
+    "atlas_user": "sral",
+    "box_name": "centos7-base",
+    "iso_url": "http://mirror.strencom.net/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso",
+    "iso_checksum": "88c0437f0a14c6e2c94426df9d43cd67"
+  },
+  "provisioners": [
+    {
+      "type": "shell",
+      "inline": [
+        "mkdir -p /tmp/provision"
+      ]
+    },
+    {
+      "destination": "/tmp/provision/common.sh",
+      "source": "provision/scripts/common.sh",
+      "type": "file"
+    },
+    {
+      "execute_command": "echo 'vagrant' | {{.Vars}} sudo -S -E bash '{{.Path}}'",
+      "scripts": [
+        "provision/scripts/core.sh",
+        "provision/scripts/docker.sh",
+        "provision/scripts/vbox-guest-additions.sh",
+        "provision/scripts/postinst-clean.sh"
+      ],
+      "type": "shell"
+    }
+  ],
+  "builders": [
+    {
+      "boot_command": [
+        "<wait><esc><esc>",
+        "linux ks=http://{{.HTTPIP}}:{{.HTTPPort}}/kickstart<enter>"
+      ],
+      "boot_wait": "10s",
+      "guest_os_type": "RedHat_64",
+      "headless": "false",
+      "http_directory": "http",
+      "iso_checksum": "{{user `iso_checksum`}}",
+      "iso_checksum_type": "md5",
+      "iso_url": "{{user `iso_url`}}",
+      "shutdown_command": "sudo -S shutdown -P now",
+      "ssh_password": "vagrant",
+      "ssh_port": 22,
+      "ssh_username": "vagrant",
+      "ssh_wait_timeout": "20000s",
+      "type": "virtualbox-iso",
+      "vboxmanage": [
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--memory",
+          "1024"
+        ],
+        [
+          "modifyvm",
+          "{{.Name}}",
+          "--cpus",
+          "1"
+        ]
+      ],
+      "virtualbox_version_file": ".vbox_version",
+      "vm_name": "{{user `box_name`}}"
+    }
+  ],
+  "post-processors": [
+    {
+      "type": "vagrant",
+      "keep_input_artifact": true,
+      "output": "{{user `vm_name`}}-{{.Provider}}.box",
+      "vagrantfile_template": "./vagrant-template/Vagrantfile.template"
+    },
+    {
+      "artifact": "{{user `atlas_artifact`}}",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "created_at": "{{timestamp}}",
+        "provider": "virtualbox",
+        "version": "{{user `atlas_artifact`}}"
+      },
+      "type": "atlas"
+    }
+  ],
+  "push": {
+    "name": "sral/centos7-base"
+  }
+}

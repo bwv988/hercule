@@ -1,0 +1,4 @@
+Vagrant.configure("2") do |config|
+    # Add the Vagrantfile folder as shared folder.
+    config.vm.synced_folder ".", "/home/vagrant/shared_folder"
+end
