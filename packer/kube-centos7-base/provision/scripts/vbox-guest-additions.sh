@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /tmp/provision/common.sh
+
 yellowprint "\n~~~> Installing Virtualbox Guest Additions.\n"
 
 case "$PACKER_BUILDER_TYPE" in

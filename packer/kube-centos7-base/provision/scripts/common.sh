@@ -12,11 +12,21 @@ fi
 cprint () {
     local text=$1
     local color=$2
-    echo -e "$color$text$color_norm"
+    echo -e "${color}$text${color_norm}"
 }
 
 # Print stuff in yellow.
 yellowprint () {
   local text=$1
-  cprint $1 ${color_yellow}
+  cprint "$text" ${color_yellow}
+}
+
+redprint () {
+  local text=$1
+  cprint "$text" ${color_red}
+}
+
+greenprint () {
+  local text=$1
+  cprint "$text" ${color_green}
 }

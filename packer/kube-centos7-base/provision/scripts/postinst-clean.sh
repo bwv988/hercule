@@ -1,5 +1,7 @@
 #!/bin/bash
 
+source /tmp/provision/common.sh
+
 yellowprint "\n~~~> Postinstall cleanup steps.\n"
 
 # Swap cleanup.
