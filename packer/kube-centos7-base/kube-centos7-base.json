@@ -3,7 +3,6 @@
     "artifact_version": "1.0.0",
     "atlas_user": "sral",
     "box_name": "kube-centos7-base",
-    "atlas_artifact": "{{user `atlas_user`}}/{{user `box_name`}}",
     "iso_url": "http://mirror.strencom.net/centos/7/isos/x86_64/CentOS-7-x86_64-Minimal-1511.iso",
     "iso_checksum": "88c0437f0a14c6e2c94426df9d43cd67"
   },
@@ -72,21 +71,21 @@
     {
       "type": "vagrant",
       "keep_input_artifact": true,
-      "output": "{{user `vm_name`}}-{{.Provider}}.box",
+      "output": "{{user `box_name`}}-{{.Provider}}.box",
       "vagrantfile_template": "./vagrant-template/Vagrantfile.template"
     },
     {
-      "artifact": "{{user `atlas_artifact`}}",
+      "artifact": "{{user `atlas_user`}}/{{user `box_name`}}",
       "artifact_type": "vagrant.box",
       "metadata": {
         "created_at": "{{timestamp}}",
         "provider": "virtualbox",
-        "version": "{{user `atlas_artifact`}}"
+        "version": "{{user `artifact_version`}}"
       },
       "type": "atlas"
     }
   ],
   "push": {
-    "name": "sral/centos7-base"
+    "name": "{{user `atlas_user`}}/{{user `box_name`}}"
   }
 }
